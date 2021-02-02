@@ -15,13 +15,13 @@ The goals for this tutorial are:
    2. While logged in to your github username, follow the [github workflow](./2_GIT_SETUP.md) to fork this repository into your own account.
    3. Ensure that you can [serve](./3_BASIC_SERVER.md) locally.
 - [x] Using your local server, update the language in the `console log`. Pick anything at all -- but it should be different than 'Hello World!' to show that your javascript code changes are connected to your site. You should see this in the browser inspector of your local serve.
-- [ ] Push these changes up to your forked repository. You should see your commit and any code changes in the github repo.
-- [ ] Post your code and deployed links to the Tutorial 1 post on the Commons.
+- [x] Push these changes up to your forked repository. You should see your commit and any code changes in the github repo.
+- [x] Post your code and deployed links to the Tutorial 1 post on the Commons.
 
 **BONUS:**
 
-- [ ] Use the javascript file to explore javascript syntax. Console log any more interesting findings, such as the result of a function.
-- [ ] Test out your HTML/CSS knowledge to render a welcome to class messsage using the `index.html` file.
+- [x] Use the javascript file to explore javascript syntax. Console log any more interesting findings, such as the result of a function.
+- [x] Test out your HTML/CSS knowledge to render a welcome to class messsage using the `index.html` file.
 
 ## Deploy + Submit
 
