@@ -1,6 +1,6 @@
 /* CONSTANTS AND GLOBALS */
-const width = window.innerWidth * 0.7,
-  height = window.innerHeight * 0.80,
+const width = window.innerWidth * 0.80,
+  height = window.innerHeight * 0.85,
   margin = { top: 20, bottom: 60, left: 60, right: 60 },
   radius = 5;
 
@@ -13,14 +13,12 @@ let yScale;
 /* APPLICATION STATE */
 let state = {
   data: [],
-  selectedParty: "All" // + YOUR INITIAL FILTER SELECTION
+  selectedParty: "All"
 };
 
 /* LOAD DATA */
-d3.csv("../data/usaheight.csv", d3.autoType).then(raw_data => {
-  // + SET YOUR DATA PATH
+d3.csv("../data/chd.csv", d3.autoType).then(raw_data => {
   console.log("data", raw_data);
-  // save our data to application state
   state.data = raw_data;
   init();
 });
@@ -30,13 +28,12 @@ d3.csv("../data/usaheight.csv", d3.autoType).then(raw_data => {
 function init() {
   console.log('State:', state)
   //SCALES
-    const xScale = d3.scaleLinear()
-      .domain(d3.extent(state.data, d => d.meanheight))
-      .range([margin.left, width - margin.right])
-  //console.log("xScale:", xScale, xScale, xScale(142.6888017))
+    xScale = d3.scaleLinear()
+      .domain(d3.extent(state.data, d => d.bmi))
+      .range([margin.left, width - margin.right]) 
 
-    const yScale = d3.scaleLinear()
-      .domain(d3.extent(state.data, d => d.year))
+    yScale = d3.scaleLinear()
+      .domain(d3.extent(state.data, d => d.heartrate))
       .range([height - margin.bottom, margin.top]) //our min value is at the bottom, max value is at the top of our svg 
 
   //AXES
@@ -44,20 +41,55 @@ function init() {
     const yAxis = d3.axisLeft(yScale)
 
   //Creating SVG
-    const svg = d3.select("#d3-container")
+    svg = d3.select("#d3-container")
       .append("svg")
       .attr("width", width)
       .attr("height", height)
 
+  //Adding Axes
     svg.append("g")
       .attr("class", "xAxis")
       .attr("transform", `translate(${0}, ${height - margin.bottom})`)
       .call(xAxis)
+      .append("text")
+      .attr("class", 'axis-title')
+      .attr("x", width / 2)
+      .attr("y", 50)
+      .attr("text-anchor", "middle")
+      .text("Body Mass Index")
 
-      svg.append("g")
+    svg.append("g")
       .attr("class", "yAxis")
       .attr("transform", `translate(${margin.left}, ${0})`)
       .call(yAxis)
+      .append("text")
+      .attr("class", 'axis-title')
+      .attr("x", -50)
+      .attr("y", height / 2)
+      .attr("writing-mode", "vertical-lr")
+      .attr("text-anchor", "middle")
+      .text("Heart Rate (Beats Per Minute)")
+
+    //SETUP  UI ELEMENTS
+    const dropdown = d3.select("#dropdown") 
+      
+    dropdown.selectAll("options")
+      .data([
+        { key: "All", label: "All"},
+        { key: "male", label: "Male"},
+        { key: "female", label: "Female"}])
+      .join("option")
+      .attr("value", d => d.key)
+      .text(d => d.label)
+    
+    dropdown.on("change", event => {
+      console.log("DROP DOWN IS CHANGED", event.target.value) 
+      state.selectedParty = event.target.value
+      console.log("NEW STATE", state)
+      draw();
+    })
+
+      draw();
 
 }
 
@@ -66,21 +98,52 @@ function init() {
 function draw() {
 
   // + FILTER DATA BASED ON STATE
-  const filteredData = state.data // <--- update to filter
+  const filteredData = state.data
+  .filter(d => {
+    if (state.selectedParty === "All") return true 
+    else return d.gender === state.selectedParty
+  })
 
-  // + DRAW CIRCLES
-  const dot = svg
-    .selectAll("circle")
-    .data(filteredData, d => d.BioID) // second argument is the unique key for that row
+  svg.selectAll("circle")
+    .data(filteredData, d => d.patientnum) //arbitrary ID# to make each data point unique   
     .join(
-      // + HANDLE ENTER SELECTION
-      enter => enter.append("circle"),
+        enter => enter.append("circle")
+          .attr("r", radius)
+          .attr("fill", d => {
+          if (d.gender === "male") return "#5582f9"
+          else return "#fa55ed"
+          })
+          .style("stroke-opacity", .30)
+          .style("stroke", "black")
+          .attr("cy", margin.top)
+          .attr("cx", d => xScale(d.bmi))
+          .call(enter => enter
+            .transition()
+            .ease(d3.easeBounce)
+            .duration(1200)
+            .attr("cy", d => yScale(d.heartrate))
+          ),
 
-      // + HANDLE UPDATE SELECTION
-      update => update,
-
-      // + HANDLE EXIT SELECTION
-      exit => exit.remove()
-
-    );
+        update => update
+            .call(sel => sel
+              .transition()
+              .duration(250)
+              .attr("r", radius * 1.5)
+              .transition()
+              .duration(250)
+              .attr("r", radius)
+           ),
+           
+        exit => exit
+          .attr("cy", d => yScale(d.heartrate))
+          .attr("cx", d => xScale(d.bmi))
+            .call(exit => exit
+              .transition()
+              .style("opacity", .25)
+              .duration(500)
+              .attr("cx", width - margin.right)
+              .attr("cy", height / 2)
+              .remove()
+          )
+      );
 }
