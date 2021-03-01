@@ -119,9 +119,10 @@ function draw() {
           .attr("cx", d => xScale(d.bmi))
           .call(enter => enter
             .transition()
-            .ease(d3.easeBounce)
+            .delay(500)
             .duration(1200)
             .attr("cy", d => yScale(d.heartrate))
+            .ease(d3.easeBounce)
           ),
 
         update => update
@@ -139,6 +140,7 @@ function draw() {
           .attr("cx", d => xScale(d.bmi))
             .call(exit => exit
               .transition()
+              .ease(d3.easeExpOut)
               .style("opacity", .25)
               .duration(500)
               .attr("cx", width - margin.right)
