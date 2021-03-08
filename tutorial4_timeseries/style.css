@@ -1,3 +1,7 @@
-svg{
-    border: green 2px solid;
+path.line{ 
+    opacity: 0;
+}
+
+path.line.visible{
+    opacity: 1;
 }
