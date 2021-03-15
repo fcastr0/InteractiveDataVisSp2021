@@ -176,13 +176,13 @@ function draw() {
    .join("div")
    .attr("class", 'hover-content')
    .classed("visible", d=> d.visible)
-  // Not needed since I am placing a fixed tooltip 
-  //  .style("position", 'absolute')
-  //  .style("transform", d=> {
-  //    // only move if we have a value for screenPosition
-  //    if (d.screenPosition)
-  //    return `translate(${d.screenPosition[0]}px, ${d.screenPosition[1]}px)`
-  //  })
+  // tooltip position is located here
+   .style("position", 'absolute')
+   .style("transform", d=> {
+     // only move if we have a value for screenPosition
+     if (d.screenPosition)
+     return `translate(${d.screenPosition[0]}px, ${d.screenPosition[1]}px)`
+   })
    .html(d=> {
      return `
      <div>Find Out Where You Are!</div>
