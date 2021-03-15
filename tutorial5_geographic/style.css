@@ -2,7 +2,7 @@
     top: 0;
     left: 0;
     max-width: 300px;
-    background-color: white;
+    background-color: lightgray;
     padding: .5em;
     opacity: 0;
     /* need to remove pointer events so that
