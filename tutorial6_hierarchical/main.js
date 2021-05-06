@@ -104,10 +104,10 @@ function init() {
         d.x + (d.x - d.x) / 2,
         d.y + (d.y - d.y) / 2
        ], // ^ this makes tooltip appear in the center of our rectangles or circles in this case
-       name: d.data.name,
+       names: d.data.name,
        value: d.data.value,
        // example for something you can do with a leaf node:
-       anscestorsPath: d.ancestors()
+       anscestorsPaths: d.ancestors()
          .reverse()
          .map(d => d.data.name)
          .join("/")
@@ -134,10 +134,10 @@ function draw() {
    tooltip
      .html(
        `
-   <div>Name: ${state.hover.name}</div>
-   <div>Value: ${state.hover.value}</div>
-   <div>Hierarchy Path: ${state.hover.anscestorsPath}</div>
-   `
+      <div>Name: ${state.hover.names}</div>
+      <div>Value: ${state.hover.value}</div>
+      <div>Hierarchy Path: ${state.hover.anscestorsPaths}</div>
+      `
      )
      .transition()
      .duration(300)
