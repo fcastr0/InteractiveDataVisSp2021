@@ -46,7 +46,7 @@ yScale = d3.scaleLinear()
 // AXES 
 const xAxis = d3.axisBottom(xScale)
   .tickFormat(d3.timeFormat("%Y")) //sets it to yearly 
-  .ticks(d3.timeYear.every(2)) 
+  .ticks(d3.timeYear.every(5)) 
 
 const yAxis = d3.axisLeft(yScale)
 
