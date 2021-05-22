@@ -18,7 +18,7 @@
 circle:hover {
   stroke-width: 2.5;
   fill-opacity: 1;
-  stroke: rgba(144, 18, 228, 0.836);
+  stroke: rgb(144, 18, 228);
   cursor: pointer;
 }
 
